@@ -5,7 +5,8 @@ require_once(__DIR__.'/AbstractData.php');
 
 // postmetaに値をひとつ保存するデータクラス
 class PostMetaData extends \WpCustomPostLib\AbstractData {
-  protected $accept_html = false;
+  private $accept_type = 'text';
+  protected $acceptable_type = ['text', 'html', 'object'];
   protected $multi = false;
   protected $default_value = null;
 
@@ -37,8 +38,33 @@ class PostMetaData extends \WpCustomPostLib\AbstractData {
     return $this;
   }
 
-  public function accept_html(bool $flag=true): self {
-    $this->accept_html = $flag;
+  private function accept(string $typename): self {
+    if (in_array($typename, $this->acceptable_type, true)) {
+      $this->accept = $typename;
+      return $this;
+    }
+    $trace = debug_backtrace();
+    $f = $trace[0]['file'];
+    $l = $trace[0]['line'];
+    $msg = implode(' ', [
+      "Invalid data type was requested in ${f} on line ${l}.",
+      "This request will be ignored.(you specified: ${typename})",
+    ]);
+    trigger_error($msg , E_USER_WARNING);
+  }
+
+  public function accept_text(): self {
+    $this->accept('text');
+    return $this;
+  }
+
+  public function accept_html(): self {
+    $this->accept('html');
+    return $this;
+  }
+
+  public function accept_object(): self {
+    $this->accept('object');
     return $this;
   }
 
@@ -48,11 +74,25 @@ class PostMetaData extends \WpCustomPostLib\AbstractData {
   }
 
   protected function sanitize($data) {
-    return $this->accept_html ? wp_kses_post($data) : esc_textarea($data);
+    switch ($this->accept_type) {
+      case 'text': return esc_textarea($data);
+      case 'html': return wp_kses_post($data);
+      case 'object': return $data;
+    }
+    trigger_error(
+      $this->accept_type." is not an implemented data type.",
+      E_USER_ERROR);
   }
 
   protected function contaminate($data) {
-    return $this->accept_html ? esc_textarea($data) : $data;
+    switch ($this->accept_type) {
+      case 'text': return $data;
+      case 'html': return esc_textarea($data);
+      case 'object': return $data;
+    }
+    trigger_error(
+      $this->accept_type." is not an implemented data type.",
+      E_USER_ERROR);
   }
 
   private function set_default_value(int $post_id, \WP_Post $post, bool $update) {
