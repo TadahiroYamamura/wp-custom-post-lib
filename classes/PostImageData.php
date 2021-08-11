@@ -37,8 +37,8 @@ class PostImageData extends \WpCustomPostLib\AbstractData {
         [$this, 'extract_image_data'],
         get_post_meta($post->ID, $this->name, false));
     } else {
-      return $this->extract_image_data(
-        get_post_meta($post->ID, $this->name, true));
+      $img_id = get_post_meta($post->ID, $this->name, true);
+      return empty($img_id) ? [] : $this->extract_image_data($img_id);
     }
   }
 
