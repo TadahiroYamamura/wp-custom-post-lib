@@ -46,7 +46,7 @@ class CustomPost {
     $options = $this->init_options($label, $options);
 
     // オプションに基づいてオブジェクトを初期化
-    $this->_renderer = new DefaultRenerer($options['template']);
+    $this->_renderer = new DefaultRenderer($options['template']);
 
     // 各種イベントを登録していく
     add_action('init', function() use($self, $options) { register_post_type($self->get_name(), $options); });

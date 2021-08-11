@@ -8,7 +8,7 @@ abstract class Renderer {
 }
 
 // デフォルト実装
-class DefaultRenerer extends \WpCustomPostLib\Renderer {
+class DefaultRenderer extends \WpCustomPostLib\Renderer {
   private array $readable_props = ['template'];
 
   private string $template;
