@@ -40,11 +40,13 @@ class CustomPost {
     $self = $this;
     $this->_name = $name;
     $this->_label = $label;
-    $this->_renderer = new DefaultRenerer(realpath(get_theme_root()."/views/${name}.php"));
     $this->_admintable = new AdminTable();
 
     // オプションにデフォルト値を適用
     $options = $this->init_options($label, $options);
+
+    // オプションに基づいてオブジェクトを初期化
+    $this->_renderer = new DefaultRenerer($options['template']);
 
     // 各種イベントを登録していく
     add_action('init', function() use($self, $options) { register_post_type($self->get_name(), $options); });
@@ -60,6 +62,8 @@ class CustomPost {
   }
 
   protected function init_options(string $label, array $options): array {
+    $name = $this->get_name();
+
     // この値は強制的に上書き
     $options['label'] = $label;
     $options['labels'] = ['name' => $label];
@@ -71,6 +75,7 @@ class CustomPost {
       'show_in_rest' => true,
       'menu_position' => 5,
       'supports' => ['title'],
+      'template' => get_template_directory()."/views/${name}.php",
     ], $options);
   }
 
