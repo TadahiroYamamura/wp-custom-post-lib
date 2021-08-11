@@ -43,11 +43,12 @@ class PostImageData extends \WpCustomPostLib\AbstractData {
   }
 
   private function extract_image_data($id) {
+    $file = get_attached_file($id);
     return [
       'id' => $id,
       'url' => wp_get_attachment_image_url($id, 'full', false),
       'name' => $this->name,
-      'size' => getimagesize(get_attached_file($id))
+      'size' => empty($file) ? null : getimagesize($file)
     ];
   }
 }
