@@ -20,3 +20,9 @@ require_once(__DIR__.'/classes/PostMetaData.php');
 require_once(__DIR__.'/classes/PostTermData.php');
 require_once(__DIR__.'/classes/PostThumbnailData.php');
 require_once(__DIR__.'/classes/Renderer.php');
+
+
+add_action('admin_enqueue_scripts', function() {
+  wp_register_style('custompostlib-style', plugin_dir_url(__FILE__).'/component.css');
+  wp_enqueue_style('custompostlib-style');
+});
