@@ -7,12 +7,13 @@
   "license": "MIT",
   "scripts": {
     "copy:src": "cp -r src/* wp-custompost-lib/",
+    "copy:js": "cp -r js/ wp-custompost-lib/",
     "copy:license": "cp LICENSE wp-custompost-lib/",
     "copy:readme": "cp readme.txt wp-custompost-lib/",
     "makedir:dist": "mkdir -p wp-custompost-lib",
     "postcss": "postcss 'css/**/[!_]*.css' --base css -m --dir wp-custompost-lib/css",
     "clean": "rm -rf wp-custompost-lib & rm release.zip",
-    "build": "npm run makedir:dist && npm run copy:src && npm run postcss",
+    "build": "npm run makedir:dist && npm run copy:src && npm run copy:js && npm run postcss",
     "release": "npm run build && npm run copy:license && npm run copy:readme && zip -qr release.zip wp-custompost-lib"
   },
   "devDependencies": {

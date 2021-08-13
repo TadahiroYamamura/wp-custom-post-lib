@@ -24,5 +24,7 @@ require_once(__DIR__.'/classes/Renderer.php');
 
 add_action('admin_enqueue_scripts', function() {
   wp_register_style('custompostlib-style', plugin_dir_url(__FILE__).'/css/component.css');
+  wp_register_script('custompostlib-script', plugin_dir_url(__FILE__).'/js/component.js');
   wp_enqueue_style('custompostlib-style');
+  wp_enqueue_script('custompostlib-script');
 });
