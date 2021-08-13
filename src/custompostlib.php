@@ -23,6 +23,6 @@ require_once(__DIR__.'/classes/Renderer.php');
 
 
 add_action('admin_enqueue_scripts', function() {
-  wp_register_style('custompostlib-style', plugin_dir_url(__FILE__).'/component.css');
+  wp_register_style('custompostlib-style', plugin_dir_url(__FILE__).'/css/component.css');
   wp_enqueue_style('custompostlib-style');
 });
