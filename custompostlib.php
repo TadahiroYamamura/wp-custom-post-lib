@@ -9,6 +9,7 @@
  * License:     MIT
  */
 
+require_once(__DIR__.'/functions.php');
 require_once(__DIR__.'/classes/AbstractData.php');
 require_once(__DIR__.'/classes/AdminTable.php');
 require_once(__DIR__.'/classes/CustomPost.php');
