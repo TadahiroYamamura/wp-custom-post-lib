@@ -11,15 +11,15 @@ class PostMetaData extends \WpCustomPostLib\AbstractData {
   protected $default_value = null;
 
   public function do_save(int $post_id, \WP_Post $post, bool $update) {
-    if (!isset($_POST[$this->name])) return;
-
     if ($this->multi) {
-      $this->set_default_value($post_id, $post, $update);
       delete_post_meta($post_id, $this->name);
+      if (!isset($_POST[$this->name])) return;
+      $this->set_default_value($post_id, $post, $update);
       foreach ($_POST[$this->name] as $v) {
         add_post_meta($post_id, $this->name, $this->sanitize($v));
       }
     } else {
+      if (!isset($_POST[$this->name])) return;
       $this->set_default_value($post_id, $post, $update);
       update_post_meta($post_id, $this->name, $this->sanitize($_POST[$this->name]));
     }
