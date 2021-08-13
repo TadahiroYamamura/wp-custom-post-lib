@@ -20,3 +20,12 @@ function admin_textarea($name, $label, $value) {
   </label>
 <?php
 }
+
+function admin_checkbox($name, $label, $value, $checked) {
+?>
+  <label class="admin-input-component checkbox">
+    <input type="checkbox" class="component" name="<?= $name ?>" value="<?= $value ?>" <?= checked($checked) ?>>
+    <span class="label"><?= $label ?></span>
+  </label>
+<?php
+}
