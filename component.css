@@ -69,3 +69,17 @@
   top: 0.3rem;
   font-size: 0.7rem;
 }
+
+
+
+
+
+
+
+/* ==============================================
+ * チェックボックス
+ * ============================================== */
+.admin-input-component.checkbox .component:checked + .label {
+  color: #2271b1;
+  font-weight: bold;
+}
