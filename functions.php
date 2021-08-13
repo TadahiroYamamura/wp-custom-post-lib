@@ -29,3 +29,17 @@ function admin_checkbox($name, $label, $value, $checked) {
   </label>
 <?php
 }
+
+function admin_select($name, $label, $options, $current_value) {
+?>
+  <label class="admin-input-component select">
+    <select class="component" name="<?= $name ?>">
+      <option value="" hidden></option>
+      <?php foreach ($options as $value => $text): ?>
+        <option value="<?= $value?>" <?= selected($value === $current_value) ?>><?= $text ?></option>
+      <?php endforeach; ?>
+    </select>
+    <span class="label"><?= $label ?></span>
+  </label>
+<?php
+}
