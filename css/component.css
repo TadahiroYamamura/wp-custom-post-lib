@@ -81,3 +81,36 @@
   color: #2271b1;
   font-weight: bold;
 }
+
+
+
+
+
+
+
+/* ==============================================
+ * セレクトボックス
+ * ============================================== */
+.admin-input-component.select {
+  position: relative;
+  display: inline-block;
+
+  .component {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: unset;
+    min-width: unset;
+    margin: 0;
+    padding: 1.5rem 0.6rem 0.4rem;
+    line-height: 1.0em;
+  }
+
+  .label {
+    position: absolute;
+    top: 0.3rem;
+    left: 0.6rem;
+    font-size: 0.7rem;
+    color: #aaa;
+  }
+}
