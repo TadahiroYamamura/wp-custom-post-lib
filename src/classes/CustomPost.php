@@ -40,13 +40,13 @@ class CustomPost {
     $self = $this;
     $this->_name = $name;
     $this->_label = $label;
-    $this->_admintable = new AdminTable();
 
     // オプションにデフォルト値を適用
     $options = $this->init_options($label, $options);
 
     // オプションに基づいてオブジェクトを初期化
     $this->renderer = $this->generate_renderer($options);
+    $this->_admintable = $this->generate_table($options);
 
     // 各種イベントを登録していく
     add_action('init', function() use($self, $options) { register_post_type($self->get_name(), $options); });
@@ -81,6 +81,10 @@ class CustomPost {
 
   protected function generate_renderer(array $options) {
     return new DefaultRenderer($options['template']);
+  }
+
+  protected function generate_table(array $options) {
+    return new AdminTable();
   }
 
   public function get_name(): string {
