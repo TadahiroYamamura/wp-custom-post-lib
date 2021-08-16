@@ -34,9 +34,9 @@ class PostTermData extends \WpCustomPostLib\AbstractData {
       throw $terms;
     } elseif ($terms === false) {
       // ドキュメントによると: false if there are no terms or the post does not exist
-      return [];
+      return $this->multi ? [] : null;
     } else {
-      return $terms;
+      return $this->multi ? $terms : $terms[0];
     }
   }
 }
