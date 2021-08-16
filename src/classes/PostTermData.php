@@ -5,9 +5,9 @@ require_once(__DIR__.'/AbstractData.php');
 require_once(__DIR__.'/CustomTaxonomy.php');
 
 class PostTermData extends \WpCustomPostLib\AbstractData {
-  $multi = true;
+  private $multi = true;
 
-  public multiple(bool $flg=true): self {
+  public function multiple(bool $flg=true): self {
     $this->multi = $flg;
     return $this;
   }
