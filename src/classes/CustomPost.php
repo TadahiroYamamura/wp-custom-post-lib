@@ -14,7 +14,7 @@ class CustomPost {
   private $_label;
 
   // 管理画面の編集画面の描画を担当するオブジェクト
-  protected $_renderer;
+  private $_renderer;
 
   // 管理画面の一覧表の描画を担当するオブジェクト
   protected $_admintable;
@@ -46,7 +46,7 @@ class CustomPost {
     $options = $this->init_options($label, $options);
 
     // オプションに基づいてオブジェクトを初期化
-    $this->_renderer = new DefaultRenderer($options['template']);
+    $this->_renderer = $this->generate_renderer($options);
 
     // 各種イベントを登録していく
     add_action('init', function() use($self, $options) { register_post_type($self->get_name(), $options); });
@@ -77,6 +77,10 @@ class CustomPost {
       'supports' => ['title'],
       'template' => get_template_directory()."/views/${name}.php",
     ], $options);
+  }
+
+  protected function generate_renderer(array $options) {
+    return new DefaultRenderer($options['template']);
   }
 
   public function get_name(): string {
