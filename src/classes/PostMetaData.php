@@ -40,7 +40,7 @@ class PostMetaData extends \WpCustomPostLib\AbstractData {
 
   private function accept(string $typename): self {
     if (in_array($typename, $this->acceptable_type, true)) {
-      $this->accept = $typename;
+      $this->accept_type = $typename;
       return $this;
     }
     $trace = debug_backtrace();
@@ -51,21 +51,19 @@ class PostMetaData extends \WpCustomPostLib\AbstractData {
       "This request will be ignored.(you specified: ${typename})",
     ]);
     trigger_error($msg , E_USER_WARNING);
+    return null;
   }
 
   public function accept_text(): self {
-    $this->accept('text');
-    return $this;
+    return $this->accept('text');
   }
 
   public function accept_html(): self {
-    $this->accept('html');
-    return $this;
+    return $this->accept('html');
   }
 
   public function accept_object(): self {
-    $this->accept('object');
-    return $this;
+    return $this->accept('object');
   }
 
   public function default($value): self {
