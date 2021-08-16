@@ -14,7 +14,7 @@ class CustomPost {
   private $_label;
 
   // 管理画面の編集画面の描画を担当するオブジェクト
-  private $_renderer;
+  private $renderer;
 
   // 管理画面の一覧表の描画を担当するオブジェクト
   protected $_admintable;
@@ -46,7 +46,7 @@ class CustomPost {
     $options = $this->init_options($label, $options);
 
     // オプションに基づいてオブジェクトを初期化
-    $this->_renderer = $this->generate_renderer($options);
+    $this->renderer = $this->generate_renderer($options);
 
     // 各種イベントを登録していく
     add_action('init', function() use($self, $options) { register_post_type($self->get_name(), $options); });
@@ -188,7 +188,7 @@ class CustomPost {
     }
 
     // データ取得し終わったので画面に描画する
-    $this->_renderer->render($render_data, $post, $this);
+    $this->renderer->render($render_data, $post, $this);
   }
 
   public function wp_insert_post_data($data) {
