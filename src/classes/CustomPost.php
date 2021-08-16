@@ -17,7 +17,7 @@ class CustomPost {
   private $renderer;
 
   // 管理画面の一覧表の描画を担当するオブジェクト
-  protected $_admintable;
+  private $_admintable;
 
   // このカスタム投稿で扱うデータクラス群
   private $data = [];
