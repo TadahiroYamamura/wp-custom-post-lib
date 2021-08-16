@@ -84,6 +84,9 @@ function admin_image($name, $label, $id, $options=[]) {
   <div class="admin-input-component image <?= $options['class'] ?>">
     <img class="component" src="<?= empty($id) ? $options['default'] : wp_get_attachment_image_url($id, 'full', false) ?>" onclick="<?= $options['onclick'] ?>">
     <input type="hidden" name="<?= $name ?>" value="<?= $id ?>">
+    <?php if (!empty($label)): ?>
+      <span class="label"><?= $label ?></span>
+    <?php endif; ?>
   </div>
 <?php
 };
