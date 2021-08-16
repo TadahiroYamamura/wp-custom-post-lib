@@ -19,7 +19,7 @@ abstract class AbstractData {
 
   public function save(int $post_id, \WP_Post $post, bool $update) {
     foreach ($this->on_save as $callback) {
-      $data = call_user_func($callback, $post_id, $post, $update);
+      call_user_func($callback, $post_id, $post, $update);
     }
     $this->do_save($post_id, $post, $update);
   }
