@@ -5,13 +5,26 @@ require_once(__DIR__.'/AbstractData.php');
 require_once(__DIR__.'/CustomTaxonomy.php');
 
 class PostTermData extends \WpCustomPostLib\AbstractData {
+  $multi = true;
+
+  public multiple(bool $flg=true): self {
+    $this->multi = $flg;
+    return $this;
+  }
+
   public function do_save(int $post_id, \WP_Post $post, bool $update) {
-    if (!isset($_POST[$this->name]) || count($_POST[$this->name]) === 0) {
-      $term_id = '';
+    if ($this->multi) {
+      if (!isset($_POST[$this->name]) || count($_POST[$this->name]) === 0) {
+        $term_id = '';
+      } else {
+        $term_id = array_map('intval', $_POST[$this->name]);
+      }
+      wp_set_object_terms($post_id, $term_id, $this->name, false);
     } else {
-      $term_id = array_map('intval', $_POST[$this->name]);
+      if (!isset($_POST[$this->name])) return;
+      $term_id = intval($_POST[$this->name]);
+      wp_set_object_terms($post_id, $term_id, $this->name, false);
     }
-    wp_set_object_terms($post_id, $term_id, $this->name, false);
   }
 
   public function do_extract(\WP_Post $post) {
