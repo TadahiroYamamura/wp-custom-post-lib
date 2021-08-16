@@ -8,16 +8,16 @@ require_once(__DIR__.'/CustomTaxonomy.php');
 
 class CustomPost {
   // このカスタム投稿の名前(PG内でpost_typeとして参照される方)
-  private $_name;
+  private $name;
 
   // このカスタム投稿の名前(管理画面GUIに表示される方)
-  private $_label;
+  private $label;
 
   // 管理画面の編集画面の描画を担当するオブジェクト
   private $renderer;
 
   // 管理画面の一覧表の描画を担当するオブジェクト
-  private $_admintable;
+  private $admintable;
 
   // このカスタム投稿で扱うデータクラス群
   private $data = [];
@@ -26,7 +26,7 @@ class CustomPost {
   protected $taxonomies = [];
 
   // このクラス内でCallbackとして使用される関数群
-  private $_callbacks = [
+  private $callbacks = [
     'edit_form_after_title' => [],
     'wp_enqueue_scripts'    => [],
     'admin_enqueue_scripts' => [],
@@ -38,15 +38,15 @@ class CustomPost {
 
   public function __construct(string $name, string $label, array $options=[]) {
     $self = $this;
-    $this->_name = $name;
-    $this->_label = $label;
+    $this->name = $name;
+    $this->label = $label;
 
     // オプションにデフォルト値を適用
     $options = $this->init_options($label, $options);
 
     // オプションに基づいてオブジェクトを初期化
     $this->renderer = $this->generate_renderer($options);
-    $this->_admintable = $this->generate_table($options);
+    $this->admintable = $this->generate_table($options);
 
     // 各種イベントを登録していく
     add_action('init', function() use($self, $options) { register_post_type($self->get_name(), $options); });
@@ -57,8 +57,8 @@ class CustomPost {
     add_filter('pre_get_posts',                      [$this, 'pre_get_posts']);
     add_action("save_post_{$name}",                  [$this, 'save_post'], 10, 3);
     add_filter("rest_prepare_{$name}",               [$this, 'rest_prepare'], 10, 3);
-    add_filter("manage_{$name}_posts_columns",       [$this->_admintable, 'manage_posts_columns'], 10, 1);
-    add_action("manage_{$name}_posts_custom_column", [$this->_admintable, 'manage_posts_custom_column'], 10, 2);
+    add_filter("manage_{$name}_posts_columns",       [$this->admintable, 'manage_posts_columns'], 10, 1);
+    add_action("manage_{$name}_posts_custom_column", [$this->admintable, 'manage_posts_custom_column'], 10, 2);
   }
 
   protected function init_options(string $label, array $options): array {
@@ -88,17 +88,17 @@ class CustomPost {
   }
 
   public function get_name(): string {
-    return $this->_name;
+    return $this->name;
   }
 
   public function get_table(): \WpCustomPostLib\AdminTable {
-    return $this->_admintable;
+    return $this->admintable;
   }
 
   public function on(string $event, callable $fn): self {
-    if (!in_array($event, array_keys($this->_callbacks)))
+    if (!in_array($event, array_keys($this->callbacks)))
       throw new Exception('無効なイベントを登録しようとしています');
-    $this->_callbacks[$event][] = $fn;
+    $this->callbacks[$event][] = $fn;
     return $this;
   }
 
@@ -153,7 +153,7 @@ class CustomPost {
 
   public function wp_enqueue_scripts() {
     if ($this->is_associated()) {
-      foreach ($this->_callbacks['wp_enqueue_scripts'] as $fn) {
+      foreach ($this->callbacks['wp_enqueue_scripts'] as $fn) {
         call_user_func($fn);
       }
     }
@@ -162,7 +162,7 @@ class CustomPost {
   public function admin_enqueue_scripts() {
     if (is_null(get_current_screen())) return;
     if (get_current_screen()->post_type !== $this->get_name()) return;
-    foreach ($this->_callbacks['admin_enqueue_scripts'] as $fn) {
+    foreach ($this->callbacks['admin_enqueue_scripts'] as $fn) {
       call_user_func($fn);
     }
   }
@@ -171,7 +171,7 @@ class CustomPost {
     if ($post->post_type !== $this->get_name()) return;
 
     // まずはユーザーがやりたいことを実行
-    foreach ($this->_callbacks['edit_form_after_title'] as $fn) {
+    foreach ($this->callbacks['edit_form_after_title'] as $fn) {
       call_user_func($fn, $post);
     }
 
@@ -200,7 +200,7 @@ class CustomPost {
     foreach ($this->data as $x) {
       $data = $x->start_save($data);
     }
-    foreach ($this->_callbacks['wp_insert_post_data'] as $fn) {
+    foreach ($this->callbacks['wp_insert_post_data'] as $fn) {
       $data = call_user_func($fn, $data);
     }
     return $data;
@@ -208,7 +208,7 @@ class CustomPost {
 
   public function pre_get_posts(\WP_Query $query) {
     if ($this->is_associated_archive()) {
-      foreach ($this->_callbacks['pre_get_posts'] as $fn) {
+      foreach ($this->callbacks['pre_get_posts'] as $fn) {
         call_user_func($fn, $query);
       }
     }
@@ -217,7 +217,7 @@ class CustomPost {
   public function save_post(int $post_id, \WP_Post $post, bool $update) {
     if (!current_user_can('edit_post', $post_id)) return;
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
-    foreach ($this->_callbacks['save_post'] as $fn) {
+    foreach ($this->callbacks['save_post'] as $fn) {
       call_user_func($fn, $post_id, $post, $update);
     }
     foreach ($this->data as $x) {
@@ -229,7 +229,7 @@ class CustomPost {
     foreach ($this->data as $x) {
       $response->data[$x->name] = $x->extract($post);
     }
-    foreach ($this->_callbacks['rest_prepare'] as $fn) {
+    foreach ($this->callbacks['rest_prepare'] as $fn) {
       call_user_func($fn, $response, $post, $request);
     }
     return $response;
