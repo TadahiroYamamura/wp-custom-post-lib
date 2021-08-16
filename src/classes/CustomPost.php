@@ -79,11 +79,11 @@ class CustomPost {
     ], $options);
   }
 
-  protected function generate_renderer(array $options) {
+  protected function generate_renderer(array $options): \WpCustomPostLib\Renderer {
     return new DefaultRenderer($options['template']);
   }
 
-  protected function generate_table(array $options) {
+  protected function generate_table(array $options): \WpCustomPostLib\AdminTable {
     return new AdminTable();
   }
 
