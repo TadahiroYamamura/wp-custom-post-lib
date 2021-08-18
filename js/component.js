@@ -25,3 +25,7 @@ WpCustomPostLib.select_image = function(img_element, value_element) {
 WpCustomPostLib.remove_item = function(item) {
   item.parentElement.removeChild(item);
 }
+
+WpCustomPostLib.append_item = function(target, template) {
+  target.appendChild(template.content.cloneNode(true));
+}
