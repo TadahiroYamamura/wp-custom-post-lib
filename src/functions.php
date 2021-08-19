@@ -46,7 +46,7 @@ function admin_select($name, $label, $items, $current_value, $options=[]) {
   ], $options);
 
   if (count($items) > 0) {
-    if ($items[0] instanceof \WP_Term) {
+    if (isset($items[0]) && $items[0] instanceof \WP_Term) {
       $arr = [];
       foreach ($items as $item) $arr[$item->term_id] = $item->name;
       $items = $arr;
