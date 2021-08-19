@@ -8,7 +8,7 @@ function admin_input($name, $label, $value, $options=[]) {
   ], $options);
 ?>
   <label class="admin-input-component <?= $options['type'] ?> <?= $options['class'] ?>">
-    <input type="<?= $type ?>" class="component" name="<?= $name ?>" placeholder=" " value="<?= $value ?>">
+    <input type="<?= $options['type'] ?>" class="component" name="<?= $name ?>" placeholder=" " value="<?= $value ?>">
     <span class="label"><?= $label ?></span>
   </label>
 <?php
