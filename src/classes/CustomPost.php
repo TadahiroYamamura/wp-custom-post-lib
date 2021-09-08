@@ -148,6 +148,7 @@ class CustomPost {
 
   private function is_associated_archive(): bool {
     if (is_post_type_archive($this->get_name())) return true;
+    if (empty($this->taxonomies)) return false;  // 配列が空の時常にtrueを返してしまう!?
     return is_tax(array_map(function($t){return $t->get_name();}, $this->taxonomies));
   }
 
